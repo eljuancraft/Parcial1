@@ -1,105 +1,50 @@
-int pinData  = 2;
-int pinLatch = 3;
-int pinClock = 4;
-#define TIEMPO 80
+const int SER = 2;
+const int RCLK = 4;
+const int SRCLK = 5;
 
-void ledWrite(int ALed, int BLed, int CLed, int DLed, int ELed, int FLed, int GLed, int HLed){
-   shiftOut(pinData, pinClock, LSBFIRST, HLed);
-   shiftOut(pinData, pinClock, LSBFIRST, GLed);
-   shiftOut(pinData, pinClock, LSBFIRST, FLed);
-   shiftOut(pinData, pinClock, LSBFIRST, ELed);
-   shiftOut(pinData, pinClock, LSBFIRST, DLed);
-   shiftOut(pinData, pinClock, LSBFIRST, CLed);
-   shiftOut(pinData, pinClock, LSBFIRST, BLed);
-   shiftOut(pinData, pinClock, LSBFIRST, ALed);
-   digitalWrite(pinLatch, HIGH);
-   digitalWrite(pinLatch, LOW);
+int j = 0;
+int fila[8] = {127, 191, 223, 239, 247, 251, 253, 254}; //eje x /intercambiar 0 por 1
+int columna[8] = {24, 24, 24, 255, 255, 24, 24, 24}; //eje y
+
+
+void setup()
+{
+  char entrada[8] = {};
+  Serial.begin(9600);
+
+  pinMode(SER, OUTPUT); // data
+  pinMode(RCLK, OUTPUT); // store
+  pinMode(SRCLK, OUTPUT); // shift
+
 }
 
-void setup(){
-   pinMode(pinData, OUTPUT);
-   pinMode(pinLatch, OUTPUT);
-   pinMode(pinClock, OUTPUT);
+void imagen(){
+    for(int i=0; i<8; i++)
+    {
+      digitalWrite(RCLK, LOW);
+
+      shiftOut(SER, SRCLK, MSBFIRST, fila[i] );
+      shiftOut(SER, SRCLK, MSBFIRST, columna[j]);
+      digitalWrite(RCLK, HIGH);
+      j++;
+    }
+    j = 0;
 }
 
-void loop(){
-//1
-   ledWrite(128,0,0,0,0,0,0,0); delay(TIEMPO);
-   ledWrite(64,0,0,0,0,0,0,0);  delay(TIEMPO);
-   ledWrite(32,0,0,0,0,0,0,0);  delay(TIEMPO);
-   ledWrite(16,0,0,0,0,0,0,0);  delay(TIEMPO);
-   ledWrite(8,0,0,0,0,0,0,0);   delay(TIEMPO);
-   ledWrite(4,0,0,0,0,0,0,0);   delay(TIEMPO);
-   ledWrite(2,0,0,0,0,0,0,0);   delay(TIEMPO);
-   ledWrite(1,0,0,0,0,0,0,0);   delay(TIEMPO);
-//2
-   ledWrite(0,128,0,0,0,0,0,0); delay(TIEMPO);
-   ledWrite(0,64,0,0,0,0,0,0);  delay(TIEMPO);
-   ledWrite(0,32,0,0,0,0,0,0);  delay(TIEMPO);
-   ledWrite(0,16,0,0,0,0,0,0);  delay(TIEMPO);
-   ledWrite(0,8,0,0,0,0,0,0);   delay(TIEMPO);
-   ledWrite(0,4,0,0,0,0,0,0);   delay(TIEMPO);
-   ledWrite(0,2,0,0,0,0,0,0);   delay(TIEMPO);
-   ledWrite(0,1,0,0,0,0,0,0);   delay(TIEMPO);
-//3 
-   ledWrite(0,0,128,0,0,0,0,0); delay(TIEMPO);
-   ledWrite(0,0,64,0,0,0,0,0);  delay(TIEMPO);
-   ledWrite(0,0,32,0,0,0,0,0);  delay(TIEMPO);
-   ledWrite(0,0,16,0,0,0,0,0);  delay(TIEMPO);
-   ledWrite(0,0,8,0,0,0,0,0);   delay(TIEMPO);
-   ledWrite(0,0,4,0,0,0,0,0);   delay(TIEMPO);
-   ledWrite(0,0,2,0,0,0,0,0);   delay(TIEMPO);
-   ledWrite(0,0,1,0,0,0,0,0);   delay(TIEMPO);
-//4
-   ledWrite(0,0,0,128,0,0,0,0); delay(TIEMPO);
-   ledWrite(0,0,0,64,0,0,0,0);  delay(TIEMPO);
-   ledWrite(0,0,0,32,0,0,0,0);  delay(TIEMPO);
-   ledWrite(0,0,0,16,0,0,0,0);  delay(TIEMPO);
-   ledWrite(0,0,0,8,0,0,0,0);   delay(TIEMPO);
-   ledWrite(0,0,0,4,0,0,0,0);   delay(TIEMPO);
-   ledWrite(0,0,0,2,0,0,0,0);   delay(TIEMPO);
-   ledWrite(0,0,0,1,0,0,0,0);   delay(TIEMPO);
-
-//5
-   ledWrite(0,0,0,0,128,0,0,0); delay(TIEMPO);
-   ledWrite(0,0,0,0,64,0,0,0);  delay(TIEMPO);
-   ledWrite(0,0,0,0,32,0,0,0);  delay(TIEMPO);
-   ledWrite(0,0,0,0,16,0,0,0);  delay(TIEMPO);
-   ledWrite(0,0,0,0,8,0,0,0);   delay(TIEMPO);
-   ledWrite(0,0,0,0,4,0,0,0);   delay(TIEMPO);
-   ledWrite(0,0,0,0,2,0,0,0);   delay(TIEMPO);
-   ledWrite(0,0,0,0,1,0,0,0);   delay(TIEMPO);
-//6
-   ledWrite(0,0,0,0,0,128,0,0); delay(TIEMPO);
-   ledWrite(0,0,0,0,0,64,0,0);  delay(TIEMPO);
-   ledWrite(0,0,0,0,0,32,0,0);  delay(TIEMPO);
-   ledWrite(0,0,0,0,0,16,0,0);  delay(TIEMPO);
-   ledWrite(0,0,0,0,0,8,0,0);   delay(TIEMPO);
-   ledWrite(0,0,0,0,0,4,0,0);   delay(TIEMPO);
-   ledWrite(0,0,0,0,0,2,0,0);   delay(TIEMPO);
-   ledWrite(0,0,0,0,0,1,0,0);   delay(TIEMPO);
-//7
-   ledWrite(0,0,0,0,0,0,128,0); delay(TIEMPO);
-   ledWrite(0,0,0,0,0,0,64,0);  delay(TIEMPO);
-   ledWrite(0,0,0,0,0,0,32,0);  delay(TIEMPO);
-   ledWrite(0,0,0,0,0,0,16,0);  delay(TIEMPO);
-   ledWrite(0,0,0,0,0,0,8,0);   delay(TIEMPO);
-   ledWrite(0,0,0,0,0,0,4,0);   delay(TIEMPO);
-   ledWrite(0,0,0,0,0,0,2,0);   delay(TIEMPO);
-   ledWrite(0,0,0,0,0,0,1,0);   delay(TIEMPO);
- //8 
-   ledWrite(0,0,0,0,0,0,0,128); delay(TIEMPO);
-   ledWrite(0,0,0,0,0,0,0,64);  delay(TIEMPO);
-   ledWrite(0,0,0,0,0,0,0,32);  delay(TIEMPO);
-   ledWrite(0,0,0,0,0,0,0,16);  delay(TIEMPO);
-   ledWrite(0,0,0,0,0,0,0,8);   delay(TIEMPO);
-   ledWrite(0,0,0,0,0,0,0,4);   delay(TIEMPO);
-   ledWrite(0,0,0,0,0,0,0,2);   delay(TIEMPO);
-   ledWrite(0,0,0,0,0,0,0,1);   delay(TIEMPO);
+void prueva(){
+    digitalWrite(RCLK, LOW);
+    shiftOut(SER, SRCLK, MSBFIRST, fila[0] );
+    shiftOut(SER, SRCLK, MSBFIRST, columna[0]);
+    digitalWrite(RCLK, HIGH);
 }
 
 
-
-
-
-
+void loop()
+{
+    char f1[8],f2[8],f3[8],f4[8],f5[8],f6[8],f7[8],f8[8];
+    char cadena;
+    while(Serial.available()==0){};
+    cadena = Serial.read();	
+	Serial.print(cadena);
+  }
+  
