@@ -1,50 +1,34 @@
-const int SER = 2;
-const int RCLK = 4;
-const int SRCLK = 5;
-
-int j = 0;
-int fila[8] = {127, 191, 223, 239, 247, 251, 253, 254}; //eje x /intercambiar 0 por 1
-int columna[8] = {24, 24, 24, 255, 255, 24, 24, 24}; //eje y
-
-
-void setup()
-{
-  char entrada[8] = {};
+int pinDATA = 2; //DEFINIR EL PIN DE ENTRADA DEL SERIAL POR DONDE ENTRARA EL VALOR 1 O 0... DEFINE SI ES 1 O 0
+int pinCLOCK = 5; //DEFINIR EL PIN USADO PARA EL RELOJ(the shift register clock input) GUARDA EL 1 0 0 QUE SE TOMA DE LA DATA
+int pinLATCH = 4;//DEFINIR EL PIN QUE VA A CARGAR(storage register clock input) INVIA LOS DATOS GUARDADOS
+String fila = "";
+int tamaño = 0; //tamaño del arreglo para guardar todos los datos (crece)
+String banco_de_datos [tamaño][8];
+void setup() { 
   Serial.begin(9600);
-
-  pinMode(SER, OUTPUT); // data
-  pinMode(RCLK, OUTPUT); // store
-  pinMode(SRCLK, OUTPUT); // shift
-
+  pinMode(pinDATA, OUTPUT);
+  pinMode(pinLATCH, OUTPUT);
+  pinMode(pinCLOCK, OUTPUT);
+  digitalWrite(pinCLOCK,LOW);   
+  digitalWrite(pinLATCH,LOW);   
 }
-
-void imagen(){
-    for(int i=0; i<8; i++)
-    {
-      digitalWrite(RCLK, LOW);
-
-      shiftOut(SER, SRCLK, MSBFIRST, fila[i] );
-      shiftOut(SER, SRCLK, MSBFIRST, columna[j]);
-      digitalWrite(RCLK, HIGH);
-      j++;
-    }
-    j = 0;
-}
-
-void prueva(){
-    digitalWrite(RCLK, LOW);
-    shiftOut(SER, SRCLK, MSBFIRST, fila[0] );
-    shiftOut(SER, SRCLK, MSBFIRST, columna[0]);
-    digitalWrite(RCLK, HIGH);
-}
-
 
 void loop()
 {
-    char f1[8],f2[8],f3[8],f4[8],f5[8],f6[8],f7[8],f8[8];
-    char cadena;
-    while(Serial.available()==0){};
-    cadena = Serial.read();	
-	Serial.print(cadena);
+pedirDatos();
+}
+
+
+void pedirDatos()
+{
+  if(Serial.available()> 0){	
+    String fila = "";
+    delay(1000);
+    while(Serial.available()> 0){
+      fila += (char)Serial.read();
+    }
+    int lugar = 0;  			//en cual posicion del vector actual guardar
+    banco_de_datos [tamaño][lugar] = fila;
+    lugar ++;
   }
-  
+}
